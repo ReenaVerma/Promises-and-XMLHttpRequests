@@ -6,12 +6,16 @@ window.addEventListener('load', () => {
     const $searchTermInput = document.getElementById('search-term');
     const $searchResultContainer = document.getElementById('search-result-container');
     const $moreButton = document.getElementById('more-button');
+    const $errorMessageContainer = document.getElementById('error-message-container');
     let page = 1;
     let searchTerm;
 
     $searchForm.addEventListener('submit', event => {
         event.preventDefault();
+        $moreButton.classList.add('hidden');
         $searchResultContainer.innerHTML = '';
+        $errorMessageContainer.classList.add('hidden');
+        $errorMessageContainer.innerHTML = '';
         page = 1;
         searchTerm = $searchTermInput.value;
 
@@ -28,17 +32,28 @@ window.addEventListener('load', () => {
             .then(response => response.json())
             .then(json => json.results.map(imgData => imgData.urls.regular))
             .then(urls => {
-                $moreButton.classList.remove('hidden');
-                urls.forEach(url => {
-                    const $img = document.createElement('div');
-                    $img.setAttribute('style', `background-image: url('${url}');`);
-                    $img.classList.add('image');
-                    $searchResultContainer.append($img);
-                });
+                if (urls.length > 0) {
+                    urls.forEach(url => {
+                        const $img = document.createElement('div');
+                        $img.setAttribute('style', `background-image: url('${url}');`);
+                        $img.classList.add('image');
+                        $searchResultContainer.append($img);
+                    });
+                    $moreButton.classList.remove('hidden');
+                } else {
+                    $errorMessageContainer.classList.remove('hidden');
+                    $errorMessageContainer.innerHTML = `No results for '${searchTerm}'`;
+                }
+            })
+            .catch(() => {
+                $errorMessageContainer.classList.remove('hidden');
+                $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
             });
     });
 
     $moreButton.addEventListener('click', () => {
+        $errorMessageContainer.classList.add('hidden');
+        $errorMessageContainer.innerHTML = '';
         page++;
 
         const request = new Request(`${searchUrl}?page=${page}&query=${searchTerm}`, {
@@ -61,6 +76,10 @@ window.addEventListener('load', () => {
                     $img.classList.add('image');
                     $searchResultContainer.append($img);
                 });
+            })
+            .catch(() => {
+                $errorMessageContainer.classList.remove('hidden');
+                $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
             });
     });
 });
