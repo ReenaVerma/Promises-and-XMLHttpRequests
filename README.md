@@ -10,6 +10,8 @@
 
 * Do not follow my implementation. It is unstructured on purpose :),
 
+## First task followup
+* check the structure, best practices, clean code stuff if needed.
 
 ## Second task
 * coming soon... (something with promises)
