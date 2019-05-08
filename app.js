@@ -12,12 +12,16 @@ window.addEventListener('load', () => {
 
     $searchForm.addEventListener('submit', event => {
         event.preventDefault();
+        page = 1;
+        searchTerm = $searchTermInput.value;
+        if(!searchTerm) {
+            return;
+        }
+
         $moreButton.classList.add('hidden');
         $searchResultContainer.innerHTML = '';
         $errorMessageContainer.classList.add('hidden');
         $errorMessageContainer.innerHTML = '';
-        page = 1;
-        searchTerm = $searchTermInput.value;
 
         const request = new Request(`${searchUrl}?page=${page}&query=${searchTerm}`, {
             method: 'GET',
