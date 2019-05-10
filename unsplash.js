@@ -1,0 +1,4 @@
+function unsplashServiceFactory() {
+
+    return {};
+}

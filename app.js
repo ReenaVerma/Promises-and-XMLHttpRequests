@@ -1,4 +1,6 @@
 window.addEventListener('load', () => {
+    const http = httpFactory();
+
     const accessKey = '893bcc21763b08a72212b54b817f6803392ebd2a737edc6c5af5807451c1b9d1';
     const baseUrl = 'https://api.unsplash.com';
     const searchUrl = `${baseUrl}/search/photos`;
@@ -23,19 +25,15 @@ window.addEventListener('load', () => {
         $errorMessageContainer.classList.add('hidden');
         $errorMessageContainer.innerHTML = '';
 
-        const request = new Request(`${searchUrl}?page=${page}&query=${searchTerm}`, {
-            method: 'GET',
-            headers: new Headers({
+        http.get(
+            `${searchUrl}?page=${page}&query=${searchTerm}`,
+            {
                 'Authorization': `Client-ID ${accessKey}`,
                 'Content-Type': 'application/json',
                 'Accept-Version': 'v1'
-            })
-        });
-
-        fetch(request)
-            .then(response => response.json())
-            .then(json => json.results.map(imgData => imgData.urls.regular))
-            .then(urls => {
+            },
+            (response) => {
+                const urls = response.results.map(imgData => imgData.urls.regular);
                 if (urls.length > 0) {
                     urls.forEach(url => {
                         const $img = document.createElement('div');
@@ -48,11 +46,12 @@ window.addEventListener('load', () => {
                     $errorMessageContainer.classList.remove('hidden');
                     $errorMessageContainer.innerHTML = `No results for '${searchTerm}'`;
                 }
-            })
-            .catch(() => {
+            },
+            (error) => {
                 $errorMessageContainer.classList.remove('hidden');
                 $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
-            });
+            }
+        );
     });
 
     $moreButton.addEventListener('click', () => {
@@ -60,19 +59,15 @@ window.addEventListener('load', () => {
         $errorMessageContainer.innerHTML = '';
         page++;
 
-        const request = new Request(`${searchUrl}?page=${page}&query=${searchTerm}`, {
-            method: 'GET',
-            headers: new Headers({
+        http.get(
+            `${searchUrl}?page=${page}&query=${searchTerm}`,
+            {
                 'Authorization': `Client-ID ${accessKey}`,
                 'Content-Type': 'application/json',
                 'Accept-Version': 'v1'
-            })
-        });
-
-        fetch(request)
-            .then(response => response.json())
-            .then(json => json.results.map(imgData => imgData.urls.regular))
-            .then(urls => {
+            },
+            (response) => {
+                const urls = response.results.map(imgData => imgData.urls.regular);
                 $moreButton.classList.remove('hidden');
                 urls.forEach(url => {
                     const $img = document.createElement('div');
@@ -80,10 +75,11 @@ window.addEventListener('load', () => {
                     $img.classList.add('image');
                     $searchResultContainer.append($img);
                 });
-            })
-            .catch(() => {
+            },
+            (error) => {
                 $errorMessageContainer.classList.remove('hidden');
                 $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
-            });
+            }
+        );
     });
 });
