@@ -1,89 +1,64 @@
-window.addEventListener('load', () => {
-    const accessKey = '893bcc21763b08a72212b54b817f6803392ebd2a737edc6c5af5807451c1b9d1';
-    const baseUrl = 'https://api.unsplash.com';
-    const searchUrl = `${baseUrl}/search/photos`;
-    const $searchForm = document.getElementById('search-form');
-    const $searchTermInput = document.getElementById('search-term');
-    const $searchResultContainer = document.getElementById('search-result-container');
-    const $moreButton = document.getElementById('more-button');
-    const $errorMessageContainer = document.getElementById('error-message-container');
-    let page = 1;
-    let searchTerm;
+document.addEventListener('DOMContentLoaded', function() {
 
-    $searchForm.addEventListener('submit', event => {
-        event.preventDefault();
-        page = 1;
-        searchTerm = $searchTermInput.value;
-        if(!searchTerm) {
-            return;
+  console.log('app.js loaded');
+  const input = document.getElementsByName('searchbox')[0];
+  const results = document.getElementById('results');
+
+  // HANDLE CHANGE ON INPUT
+  document.getElementById('form').addEventListener('submit', getApi);
+
+  // MAKE XMLHttpRequest();
+  function xhr() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `https://api.unsplash.com/search/photos?page=1&per_page=12&orientation=squarish&query=${input.value}`, true);  //true allows
+
+    xhr.setRequestHeader('Authorization', 'Client-ID ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489' );
+    xhr.setRequestHeader( 'Header', 'Accept-Version: v1' );
+
+    xhr.onload = function () {
+
+      if (xhr.readyState === 4) { //looks at the request's readyState to see if the transaction is complete
+
+        if (xhr.status === 200) { // If yes abnd HTTP status is 200, dumps the received content
+          const response = JSON.parse(xhr.responseText);
+          console.log('JSON', response);
+          displayImages(response);
+
+        } else {
+          console.error(xhr.statusText);  //if error, error message appears
         }
+      }
+    };
+    xhr.send(null); //initiates the request. The callback routine is called whenever the state of the request changes.
+  }
 
-        $moreButton.classList.add('hidden');
-        $searchResultContainer.innerHTML = '';
-        $errorMessageContainer.classList.add('hidden');
-        $errorMessageContainer.innerHTML = '';
 
-        const request = new Request(`${searchUrl}?page=${page}&query=${searchTerm}`, {
-            method: 'GET',
-            headers: new Headers({
-                'Authorization': `Client-ID ${accessKey}`,
-                'Content-Type': 'application/json',
-                'Accept-Version': 'v1'
-            })
-        });
+  // DISPLAYE IMAGES
+  function displayImages(response) {
 
-        fetch(request)
-            .then(response => response.json())
-            .then(json => json.results.map(imgData => imgData.urls.regular))
-            .then(urls => {
-                if (urls.length > 0) {
-                    urls.forEach(url => {
-                        const $img = document.createElement('div');
-                        $img.setAttribute('style', `background-image: url('${url}');`);
-                        $img.classList.add('image');
-                        $searchResultContainer.append($img);
-                    });
-                    $moreButton.classList.remove('hidden');
-                } else {
-                    $errorMessageContainer.classList.remove('hidden');
-                    $errorMessageContainer.innerHTML = `No results for '${searchTerm}'`;
-                }
-            })
-            .catch(() => {
-                $errorMessageContainer.classList.remove('hidden');
-                $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
-            });
+    let result = '';
+
+    response.results.forEach(elem => {
+      console.log('foreach', elem);
+
+      result +=
+          `<div class="res">
+            <h3> Title: ${elem.alt_description} </h3>
+            <h3> created: ${elem.created_at} </h3>
+            </h4>likes: ${elem.likes}</h3>
+            <img src="${elem.urls.small}" />
+          </div>`;
+      results.innerHTML = result;
     });
+  }
 
-    $moreButton.addEventListener('click', () => {
-        $errorMessageContainer.classList.add('hidden');
-        $errorMessageContainer.innerHTML = '';
-        page++;
 
-        const request = new Request(`${searchUrl}?page=${page}&query=${searchTerm}`, {
-            method: 'GET',
-            headers: new Headers({
-                'Authorization': `Client-ID ${accessKey}`,
-                'Content-Type': 'application/json',
-                'Accept-Version': 'v1'
-            })
-        });
+  // SUBMIT FUNCTION
+  function getApi(e) {
+    e.preventDefault();
+    console.log('Horray! Someone wrote "' + input.value + '"!');
+    xhr();
+  }
 
-        fetch(request)
-            .then(response => response.json())
-            .then(json => json.results.map(imgData => imgData.urls.regular))
-            .then(urls => {
-                $moreButton.classList.remove('hidden');
-                urls.forEach(url => {
-                    const $img = document.createElement('div');
-                    $img.setAttribute('style', `background-image: url('${url}');`);
-                    $img.classList.add('image');
-                    $searchResultContainer.append($img);
-                });
-            })
-            .catch(() => {
-                $errorMessageContainer.classList.remove('hidden');
-                $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
-            });
-    });
+
 });
