@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
     xhr.send(null); //initiates the request. The callback routine is called whenever the state of the request changes.
   }
 
-
   // DISPLAYE IMAGES
   function displayImages(response) {
 
@@ -51,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
       results.innerHTML = result;
     });
   }
-
 
   // SUBMIT FUNCTION
   function getApi(e) {
