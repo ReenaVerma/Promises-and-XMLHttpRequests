@@ -3,9 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('app.js loaded');
   const input = document.getElementsByName('searchbox')[0];
   const results = document.getElementById('results');
+  const XMLHttpError = document.getElementById('XMLHttpError');
 
   // HANDLE CHANGE ON INPUT
   document.getElementById('form').addEventListener('submit', getApi);
+
 
   // MAKE XMLHttpRequest();
   function xhr() {
@@ -26,17 +28,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } else {
           console.error(xhr.statusText);  //if error, error message appears
+          XMLHttpError.innerHTML = xhr.statusText;
         }
+
+        // error handling for no search results
+        const contentType = xhr.getResponseHeader('link');
+        if (contentType === null) {
+          XMLHttpError.innerHTML = `no results for ${input.value}`;
+          console.log('error');
+
+        } else {
+          XMLHttpError.innerHTML = `you search for ${input.value}`;
+        }
+
       }
+
     };
+
+
+    xhr.onerror = function() { // only triggers if the request couldn't be made at all
+      alert('Network Error');
+    };
+
     xhr.send(null); //initiates the request. The callback routine is called whenever the state of the request changes.
+
   }
+
 
   // DISPLAYE IMAGES
   function displayImages(response) {
 
     let result = '';
-
+    //DISPLAY results
     response.results.forEach(elem => {
       console.log('foreach', elem);
 
@@ -51,12 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+
   // SUBMIT FUNCTION
   function getApi(e) {
     e.preventDefault();
     console.log('Horray! Someone wrote "' + input.value + '"!');
+
     xhr();
-  }
+  } //end api function
 
 
 });
