@@ -3,7 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('app.js loaded');
   const input = document.getElementsByName('searchbox')[0];
   const results = document.getElementById('results');
-  const XMLHttpError = document.getElementById('XMLHttpError');
+  const resultsText = document.getElementById('resultsText');
+  let page = 6;
+
+  document.getElementById('more').onclick = function() {
+    page = 12;
+    xhr(page);
+  };
 
   // HANDLE CHANGE ON INPUT
   document.getElementById('form').addEventListener('submit', getApi);
@@ -12,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // MAKE XMLHttpRequest();
   function xhr() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `https://api.unsplash.com/search/photos?page=1&per_page=12&orientation=squarish&query=${input.value}`, true);  //true allows
+    xhr.open('GET', `https://api.unsplash.com/search/photos?page=1&per_page=${page}&orientation=squarish&query=${input.value}`, true);  //true allows
 
     xhr.setRequestHeader('Authorization', 'Client-ID ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489' );
     xhr.setRequestHeader( 'Header', 'Accept-Version: v1' );
@@ -28,36 +34,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } else {
           console.error(xhr.statusText);  //if error, error message appears
-          XMLHttpError.innerHTML = xhr.statusText;
+          resultsText.innerHTML = xhr.statusText;
         }
 
         // error handling for no search results
         const contentType = xhr.getResponseHeader('link');
         if (contentType === null) {
-          XMLHttpError.innerHTML = `no results for ${input.value}`;
+          resultsText.innerHTML = `No results for "${input.value}"! Search again!`;
           console.log('error');
 
         } else {
-          XMLHttpError.innerHTML = `you search for ${input.value}`;
+          resultsText.innerHTML = `You search for "${input.value}"`;
         }
-
       }
-
     };
 
 
+    // Network connection error
     xhr.onerror = function() { // only triggers if the request couldn't be made at all
-      alert('Network Error');
+      resultsText.innerHTML = 'Network connection error';
     };
 
     xhr.send(null); //initiates the request. The callback routine is called whenever the state of the request changes.
-
   }
 
 
   // DISPLAYE IMAGES
   function displayImages(response) {
 
+    // const newResponse = Object.keys(response.results);
+    // console.log('newResponse', newResponse);
     let result = '';
     //DISPLAY results
     response.results.forEach(elem => {
@@ -65,9 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       result +=
           `<div class="res">
-            <h3> Title: ${elem.alt_description} </h3>
-            <h3> created: ${elem.created_at} </h3>
-            </h4>likes: ${elem.likes}</h3>
+            <h2> Title: ${elem.alt_description} </h2>
+            <h3>likes: ${elem.likes}</h3>
             <img src="${elem.urls.small}" />
           </div>`;
       results.innerHTML = result;
