@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const input = document.getElementsByName('searchbox')[0];
   const results = document.getElementById('results');
   const resultsText = document.getElementById('resultsText');
-  let page = 6;
+  const moreButton = document.getElementById('more');
+  let page = 0;
 
-  document.getElementById('more').onclick = function() {
-    page = 12;
-    xhr(page);
-  };
+
+  // HIDE MORE button
+  moreButton.classList.add('displayNone');
 
   // HANDLE CHANGE ON INPUT
   document.getElementById('form').addEventListener('submit', getApi);
@@ -85,8 +85,19 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     console.log('Horray! Someone wrote "' + input.value + '"!');
 
-    xhr();
+    page = 6;
+    xhr(page);
+    moreButton.classList.remove('displayNone');
   } //end api function
+
+
+  // Return 12 results
+  moreButton.onclick = function() {
+
+    page += 6;
+    xhr(page);
+    moreButton.classList.add('displayNone');
+  };
 
 
 });
