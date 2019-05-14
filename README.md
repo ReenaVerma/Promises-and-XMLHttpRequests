@@ -31,3 +31,8 @@ xhr.onerror = function() {
 ```
 xhr.send(null);
 ```
+
+## API
+* Used ```Invision``` to test api credentials/headers:
+
+![alternativetext](https://i.imgur.com/4ciJuL8.png[)
