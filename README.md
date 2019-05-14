@@ -1,23 +1,33 @@
 # Image search
 
-## First task
-* Make the image search application,
-* register to unsplash, it is free. Documentation: https://unsplash.com/documentation,
-* don't use any dependency (no build tools, no frameworks, no libraries),
-* for http requests use `XMLHttpRequest` (https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest),
-* structure you code as you wish.
-* style your html as you like.
+## Notes
+* I did not look at your code at all, as I really wanted you to see, how I would attempt this task fist time round.
 
-* Do not follow my implementation. It is unstructured on purpose :),
+## Learnings
+* If you use an asynchronous XMLHttpRequest, you receive a callback when the data has been received. This lets the browser continue to work as normal while your request is being handled.
 
-## First task followup
-* check the structure, best practices, clean code stuff if needed.
+* Asynchronous requests should be preferred to synchronous requests for performance reasons.
 
-## Second task
-* coming soon... (something with promises)
+* Synchronous requests block the execution of code, which creates "freezing" on the screen and an unresponsive user experience.
 
-## Third task
-* coming soon... (something with fetch or jQuery deferred TBD)
+## Questions
+* I wasn't sure, for which types of errors, this code covers (line 38):
+```
+else {
+  // IF THERE IS AN ERROR DISPLAY
+  console.error('ERROR', xhr.statusText);
+  resultsText.innerHTML = xhr.statusText;
+}
+```
 
-## Fourth task
-* (optional) rewrite with a framework
+* As this code, covers network errors (line 57):
+```
+xhr.onerror = function() {
+  resultsText.innerHTML = 'Network connection error! Check you internet connection!';
+};
+```
+
+* I also wondered why ```null``` is passed through here (line 63):
+```
+xhr.send(null);
+```
