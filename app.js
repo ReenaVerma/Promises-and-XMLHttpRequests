@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     domService.$searchForm.addEventListener('submit', event => {
         event.preventDefault();
         const searchTerm = domService.getSearchTermInputValue();
-        if(!searchTerm) {
+        if (!searchTerm) {
             return;
         }
 
@@ -37,7 +37,6 @@ window.addEventListener('load', () => {
         unsplashService.getNextPage(
             (response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
-                domService.showMoreButton();
                 urls.forEach(url => {
                     const $img = domService.createImage(url);
                     domService.addImageToResultsContainer($img);
