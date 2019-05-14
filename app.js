@@ -1,84 +1,50 @@
 window.addEventListener('load', () => {
-    const http = httpFactory();
+    const unsplashService = unsplashServiceFactory();
+    const domService = domServiceFactory();
 
-    const accessKey = '893bcc21763b08a72212b54b817f6803392ebd2a737edc6c5af5807451c1b9d1';
-    const baseUrl = 'https://api.unsplash.com';
-    const searchUrl = `${baseUrl}/search/photos`;
-    const $searchForm = document.getElementById('search-form');
-    const $searchTermInput = document.getElementById('search-term');
-    const $searchResultContainer = document.getElementById('search-result-container');
-    const $moreButton = document.getElementById('more-button');
-    const $errorMessageContainer = document.getElementById('error-message-container');
-    let page = 1;
-    let searchTerm;
-
-    $searchForm.addEventListener('submit', event => {
+    domService.$searchForm.addEventListener('submit', event => {
         event.preventDefault();
-        page = 1;
-        searchTerm = $searchTermInput.value;
+        const searchTerm = domService.getSearchTermInputValue();
         if(!searchTerm) {
             return;
         }
 
-        $moreButton.classList.add('hidden');
-        $searchResultContainer.innerHTML = '';
-        $errorMessageContainer.classList.add('hidden');
-        $errorMessageContainer.innerHTML = '';
+        domService.resetDom();
 
-        http.get(
-            `${searchUrl}?page=${page}&query=${searchTerm}`,
-            {
-                'Authorization': `Client-ID ${accessKey}`,
-                'Content-Type': 'application/json',
-                'Accept-Version': 'v1'
-            },
+        unsplashService.searchImages(
+            searchTerm,
             (response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
                 if (urls.length > 0) {
                     urls.forEach(url => {
-                        const $img = document.createElement('div');
-                        $img.setAttribute('style', `background-image: url('${url}');`);
-                        $img.classList.add('image');
-                        $searchResultContainer.append($img);
+                        const $img = domService.createImage(url);
+                        domService.addImageToResultsContainer($img);
                     });
-                    $moreButton.classList.remove('hidden');
+                    domService.showMoreButton();
                 } else {
-                    $errorMessageContainer.classList.remove('hidden');
-                    $errorMessageContainer.innerHTML = `No results for '${searchTerm}'`;
+                    domService.showErrorMessage(`No results for '${searchTerm}'`);
                 }
             },
-            (error) => {
-                $errorMessageContainer.classList.remove('hidden');
-                $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
+            () => {
+                domService.showErrorMessage(`Ooops.... something went wrong`);
             }
         );
     });
 
-    $moreButton.addEventListener('click', () => {
-        $errorMessageContainer.classList.add('hidden');
-        $errorMessageContainer.innerHTML = '';
-        page++;
+    domService.$moreButton.addEventListener('click', () => {
+        domService.hideErrorMessage();
 
-        http.get(
-            `${searchUrl}?page=${page}&query=${searchTerm}`,
-            {
-                'Authorization': `Client-ID ${accessKey}`,
-                'Content-Type': 'application/json',
-                'Accept-Version': 'v1'
-            },
+        unsplashService.getNextPage(
             (response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
-                $moreButton.classList.remove('hidden');
+                domService.showMoreButton();
                 urls.forEach(url => {
-                    const $img = document.createElement('div');
-                    $img.setAttribute('style', `background-image: url('${url}');`);
-                    $img.classList.add('image');
-                    $searchResultContainer.append($img);
+                    const $img = domService.createImage(url);
+                    domService.addImageToResultsContainer($img);
                 });
             },
-            (error) => {
-                $errorMessageContainer.classList.remove('hidden');
-                $errorMessageContainer.innerHTML = `Ooops.... something went wrong`;
+            () => {
+                domService.showErrorMessage(`Ooops.... something went wrong`);
             }
         );
     });
