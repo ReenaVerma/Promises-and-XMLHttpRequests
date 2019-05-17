@@ -15,10 +15,7 @@ window.addEventListener('load', () => {
             .then((response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
                 if (urls.length > 0) {
-                    urls.forEach(url => {
-                        const $img = domService.createImage(url);
-                        domService.addImageToResultsContainer($img);
-                    });
+                    domService.addListOfImagesToResultsContainer(urls);
                     domService.showMoreButton();
                 } else {
                     domService.showErrorMessage(`No results for '${searchTerm}'`);
@@ -35,10 +32,7 @@ window.addEventListener('load', () => {
         unsplashService.getNextPage()
             .then((response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
-                urls.forEach(url => {
-                    const $img = domService.createImage(url);
-                    domService.addImageToResultsContainer($img);
-                });
+                domService.addListOfImagesToResultsContainer(urls);
             })
             .catch(() => {
                 domService.showErrorMessage(`Ooops.... something went wrong`);

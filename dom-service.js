@@ -27,6 +27,13 @@ function domServiceFactory() {
         $searchResultContainer.append($img);
     }
 
+    function addListOfImagesToResultsContainer(imageUrls) {
+        imageUrls.forEach(url => {
+            const $img = createImage(url);
+            addImageToResultsContainer($img);
+        });
+    }
+
     function showMoreButton() {
         $moreButton.classList.remove('hidden');
     }
@@ -44,8 +51,7 @@ function domServiceFactory() {
     return {
         resetDom,
         getSearchTermInputValue,
-        createImage,
-        addImageToResultsContainer,
+        addListOfImagesToResultsContainer,
         showMoreButton,
         showErrorMessage,
         hideErrorMessage,
