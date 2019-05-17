@@ -13,26 +13,22 @@ function unsplashServiceFactory() {
     let page = 1;
     let searchTerm;
 
-    function searchImages(term, successCallbackFunction, errorCallbackFunction) {
+    function searchImages(term) {
         page = 1;
         searchTerm = term;
 
-        http.get(
+        return http.get(
             `${searchUrl}?page=${page}&query=${searchTerm}`,
-            headers,
-            successCallbackFunction,
-            errorCallbackFunction
+            headers
         );
     }
 
-    function getNextPage(successCallbackFunction, errorCallbackFunction) {
+    function getNextPage() {
         page++;
 
-        http.get(
+        return http.get(
             `${searchUrl}?page=${page}&query=${searchTerm}`,
-            headers,
-            successCallbackFunction,
-            errorCallbackFunction
+            headers
         );
     }
 

@@ -11,9 +11,8 @@ window.addEventListener('load', () => {
 
         domService.resetDom();
 
-        unsplashService.searchImages(
-            searchTerm,
-            (response) => {
+        unsplashService.searchImages(searchTerm)
+            .then((response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
                 if (urls.length > 0) {
                     urls.forEach(url => {
@@ -24,27 +23,25 @@ window.addEventListener('load', () => {
                 } else {
                     domService.showErrorMessage(`No results for '${searchTerm}'`);
                 }
-            },
-            () => {
+            })
+            .catch(() => {
                 domService.showErrorMessage(`Ooops.... something went wrong`);
-            }
-        );
+            });
     });
 
     domService.$moreButton.addEventListener('click', () => {
         domService.hideErrorMessage();
 
-        unsplashService.getNextPage(
-            (response) => {
+        unsplashService.getNextPage()
+            .then((response) => {
                 const urls = response.results.map(imgData => imgData.urls.regular);
                 urls.forEach(url => {
                     const $img = domService.createImage(url);
                     domService.addImageToResultsContainer($img);
                 });
-            },
-            () => {
+            })
+            .catch(() => {
                 domService.showErrorMessage(`Ooops.... something went wrong`);
-            }
-        );
+            });
     });
 });

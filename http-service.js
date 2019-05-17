@@ -1,36 +1,38 @@
 function httpServiceFactory() {
-    function http(method, url, headers, readyCallbackFunction, errorCallbackFunction) {
-        const xhr = new XMLHttpRequest();
+    function http(method, url, headers) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
 
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                readyCallbackFunction(this);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    resolve(this);
+                }
+            };
+
+            xhr.onerror = function (error) {
+                reject(error);
             }
-        };
 
-        // handles network errors
-        xhr.onerror = function (error) {
-            errorCallbackFunction(error);
-        }
+            xhr.open(method, url);
 
-        xhr.open(method, url);
+            Object.keys(headers).forEach((headerKey) => {
+                xhr.setRequestHeader(headerKey, headers[headerKey]);
+            });
 
-        Object.keys(headers).forEach(headerKey => {
-            xhr.setRequestHeader(headerKey, headers[headerKey]);
+            xhr.send();
         });
-
-        xhr.send();
     };
 
     function get(url, headers, successCallbackFunction, errorCallbackFunction) {
-        http('GET', url, headers,
-            (xhr) => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    successCallbackFunction(JSON.parse(xhr.responseText));
-                } // not handling other cases for now
-            },
-            errorCallbackFunction
-        );
+        return http('GET', url, headers).then((xhr) => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                return JSON.parse(xhr.responseText);
+            } else {
+                // for now we don't care about this case,
+                // but we need to return something :)
+                return null;
+            }
+        });
     }
 
     return {
