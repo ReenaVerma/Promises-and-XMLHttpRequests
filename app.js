@@ -1,11 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // const unsplashService = unsplashServiceAPI();
+  const unsplashService = unsplashServiceAPI();
+  const http = xhrRequestService();
   const dom = domEvents();
 
-  // const searchTerm = 'manhattan';
-  // const searchTerm = document.getElementById('search').value;
-  // console.log('st.value', searchTerm);
+  const results = document.getElementById('results');
+
+
+  document.getElementById('form').addEventListener('submit', function(e){
+
+    const searchTerm = dom.returnSearchTerm();
+    e.preventDefault();
+    console.log(searchTerm);
+
+    unsplashService.searchImages(searchTerm)
+
+      .then((response) => {
+        console.log('response', JSON.parse(response.response));
+
+
+        // let result = '';
+        //
+        // response.results.forEach(elem => {
+        //   console.log('foreach', elem);
+        //
+        //   result +=
+        //       `<div class="res">
+        //         <h2> Title: ${elem.alt_description} </h2>
+        //         <h3>likes: ${elem.likes}</h3>
+        //         <img src="${elem.urls.small}" />
+        //       </div>`;
+        //   results.innerHTML = result;
+        // });
+
+      });
+
+  });
+
+
 
 
 
@@ -24,14 +56,30 @@ document.addEventListener('DOMContentLoaded', function() {
   // moreButton.classList.add('displayNone');
 
   // SUBMIT EVENT LISTENER ON FORM
-  const form = document.getElementById('form');
+
   //
   // function getApi(e) {
   //   e.preventDefault();
   //   console.log('Horray! Someone wrote "' + searchTerm + '"!');
 
 
-  dom.formSubmit(form)
+  // dom.formSubmit(form);
+  //
+  // const result = '';
+  //
+  // http.response().results.forEach(elem => {
+  //   console.log('foreach', elem);
+  //
+  //   result +=
+  //         `<div class="res">
+  //           <h2> Title: ${elem.alt_description} </h2>
+  //           <h3>likes: ${elem.likes}</h3>
+  //           <img src="${elem.urls.small}" />
+  //         </div>`;
+  //   results.innerHTML = result;
+  // });
+
+
     // .then(() => {
     //   unsplashService.searchImages;
     // });

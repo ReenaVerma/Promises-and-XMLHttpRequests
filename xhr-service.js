@@ -4,49 +4,59 @@ function xhrRequestService() {
 
   function http(method, apiURL) {
 
-    const xhr = new XMLHttpRequest();
+    return new Promise((resolve, reject) => {
 
-    // THIS ALLOWS REQUEST TO BE HANDLED ASYNCRONOUSLY
-    xhr.open(method, apiURL, true);
 
-    xhr.setRequestHeader('Authorization', `Client-ID ${apikey}`);
-    xhr.setRequestHeader( 'Header', 'Accept-Version: v1' );
+      const xhr = new XMLHttpRequest();
 
-    xhr.onload = function () {
-      if (xhr.readyState === 4) {
+      // THIS ALLOWS REQUEST TO BE HANDLED ASYNCRONOUSLY
+      xhr.open(method, apiURL, true);
 
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          console.log('JSON RESPONSE', response);
+      xhr.setRequestHeader('Authorization', `Client-ID ${apikey}`);
+      xhr.setRequestHeader( 'Header', 'Accept-Version: v1' );
 
-        } else {
-          console.error('ERROR', xhr.statusText);
-          // resultsText.innerHTML = xhr.statusText;
+      xhr.onload = function () {
+        if (xhr.readyState === 4) {
+
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            console.log('JSON RESPONSE', response);
+            resolve(xhr);
+
+
+          } else {
+            console.error('ERROR', xhr.statusText);
+            // resultsText.innerHTML = xhr.statusText;
+          }
+
+
+          // IF THERE IS NO CALL TO THE API VIA CONTENTTYPE HEADER, RETURN SEARCH AGAIN ERROR MESSAGE
+          const contentType = xhr.getResponseHeader('link');
+          if (contentType === null) {
+            // resultsText.innerHTML = `No results for "${input.value}"! Search again!`;
+          } else {
+            // resultsText.innerHTML = `You search for "${input.value}"`;
+          }
         }
+        return response = JSON.parse(xhr.responseText);
+      };
 
-        // IF THERE IS NO CALL TO THE API VIA CONTENTTYPE HEADER, RETURN SEARCH AGAIN ERROR MESSAGE
-        const contentType = xhr.getResponseHeader('link');
-        if (contentType === null) {
-          // resultsText.innerHTML = `No results for "${input.value}"! Search again!`;
-        } else {
-          // resultsText.innerHTML = `You search for "${input.value}"`;
-        }
-      }
-    };
+      // NETWORK CONNECTION ERROR
+      xhr.onerror = function() {
+        // resultsText.innerHTML = 'Network connection error! Check you internet connection!';
+        console.log('Network connection error! Check you internet connection!');
+      };
 
-    // NETWORK CONNECTION ERROR
-    xhr.onerror = function() {
-      // resultsText.innerHTML = 'Network connection error! Check you internet connection!';
-      console.log('Network connection error! Check you internet connection!');
-    };
+      xhr.send(null);
+    })
 
-    xhr.send(null);
   }
 
 
   function get(apiURL) {
     return http('GET', apiURL);
   }
+
 
   return {
     get
