@@ -3,6 +3,7 @@ function xhrRequestService() {
   const apikey = 'ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489';
 
   function http(method, apiURL) {
+
     const xhr = new XMLHttpRequest();
 
     // THIS ALLOWS REQUEST TO BE HANDLED ASYNCRONOUSLY

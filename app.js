@@ -1,15 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  const unsplashService = unsplashServiceAPI();
+  // const unsplashService = unsplashServiceAPI();
   const dom = domEvents();
-  const searchTerm = document.getElementsByName('searchbox')[0];
+
+  // const searchTerm = 'manhattan';
+  // const searchTerm = document.getElementById('search').value;
+  // console.log('st.value', searchTerm);
+
+
 
 
   // VARIABLES
   // const input = document.getElementsByName('searchbox')[0];
 
 
-  // const inputValue = input.value;
   // const results = document.getElementById('results');
   // const resultsText = document.getElementById('resultsText');
   // const moreButton = document.getElementById('more');
@@ -26,11 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
   //   e.preventDefault();
   //   console.log('Horray! Someone wrote "' + searchTerm + '"!');
 
-    dom.formSubmit(form);
-    unsplashService.searchImages(searchTerm);
-    // .then((response) => {
-    // console.log('response', response);
+
+  dom.formSubmit(form)
+    // .then(() => {
+    //   unsplashService.searchImages;
     // });
+  // unsplashService.searchImages();
+  // .then((response) => {
+  // console.log('response', response);
+  // });
   // }
 
   //

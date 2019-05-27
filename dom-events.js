@@ -1,12 +1,15 @@
 function domEvents() {
 
-  const searchTerm = document.getElementsByName('searchbox')[0];
+  const unsplashService = unsplashServiceAPI();
 
-  function formSubmit() {
+  function formSubmit(){
     return addEventListener('submit', function(e){
+
       e.preventDefault();
-      console.log('Horray! Someone wrote "' + searchTerm.value + '"!');
-      console.log('submit');
+      // getSearchTerm();
+      const searchTerm = document.getElementById('search').value;
+      console.log('Horray! Someone wrote "' + searchTerm + '"!');
+      return unsplashService.searchImages(searchTerm);
     });
   }
 
@@ -14,6 +17,7 @@ function domEvents() {
 
   return {
     formSubmit
+
   };
 
 }
