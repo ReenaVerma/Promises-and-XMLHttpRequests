@@ -1,41 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   const unsplashService = unsplashServiceAPI();
-  const http = xhrRequestService();
-  const dom = domEvents();
+  const http            = xhrRequestService();
+  const dom             = domEvents();
 
-  const results = document.getElementById('results');
+  const form            = domEvents().formElement();
+  const results         = domEvents().resultsContainer();
+  const moreButton      = domEvents().moreButton();
+  // const displayImages   = domEvents().displayImages();
 
 
-  document.getElementById('form').addEventListener('submit', function(e){
-
-    const searchTerm = dom.returnSearchTerm();
+  form.addEventListener('submit', function(e){
     e.preventDefault();
-    console.log(searchTerm);
-
+    const searchTerm = dom.returnSearchTerm();
     unsplashService.searchImages(searchTerm)
 
       .then((response) => {
-        console.log('response', JSON.parse(response.response));
+        domEvents().displayImages(response);
+      });
+  });
 
 
-        // let result = '';
-        //
-        // response.results.forEach(elem => {
-        //   console.log('foreach', elem);
-        //
-        //   result +=
-        //       `<div class="res">
-        //         <h2> Title: ${elem.alt_description} </h2>
-        //         <h3>likes: ${elem.likes}</h3>
-        //         <img src="${elem.urls.small}" />
-        //       </div>`;
-        //   results.innerHTML = result;
-        // });
+  moreButton.onclick = function(e) {
+    e.preventDefault();
+    const searchTerm = dom.returnSearchTerm();
+    unsplashService.moreImages(searchTerm)
 
+      .then((response) => {
+        domEvents().displayImages(response);
       });
 
-  });
+
+  };
 
 
 

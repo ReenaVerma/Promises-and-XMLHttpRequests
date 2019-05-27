@@ -17,6 +17,35 @@ function domEvents() {
     return searchTerm;
   }
 
+  function resultsContainer() {
+    const results = document.getElementById('results');
+    return results;
+  }
+
+  function moreButton() {
+    const moreButton = document.getElementById('more');
+    return moreButton;
+  }
+
+  function displayImages(response) {
+    const res = JSON.parse(response.response);
+
+    let result = '';
+    res.results.forEach(elem => {
+      console.log('foreach', elem);
+
+      result +=
+          `<div class="res">
+            <h2> Title: ${elem.alt_description} </h2>
+            <h3>likes: ${elem.likes}</h3>
+            <img src="${elem.urls.small}" />
+          </div>`;
+      results.innerHTML = result;
+    });
+
+    return results;
+  }
+
   // const results = document.getElementById('results');
   // let result = '';
 
@@ -45,8 +74,10 @@ function domEvents() {
 
   return {
     formElement,
-    returnSearchTerm
-
+    returnSearchTerm,
+    resultsContainer,
+    moreButton,
+    displayImages
   };
 
 }
