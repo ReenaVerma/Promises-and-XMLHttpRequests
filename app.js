@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
 
   const unsplashService = unsplashServiceAPI();
+  const dom = domEvents();
+  const searchTerm = document.getElementsByName('searchbox')[0];
 
 
   // VARIABLES
   // const input = document.getElementsByName('searchbox')[0];
 
-  const searchTerm = 'cat'
+
   // const inputValue = input.value;
   // const results = document.getElementById('results');
   // const resultsText = document.getElementById('resultsText');
@@ -18,22 +20,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // moreButton.classList.add('displayNone');
 
   // SUBMIT EVENT LISTENER ON FORM
-  document.getElementById('form').addEventListener('submit', getApi);
+  const form = document.getElementById('form');
+  //
+  // function getApi(e) {
+  //   e.preventDefault();
+  //   console.log('Horray! Someone wrote "' + searchTerm + '"!');
 
-  function getApi(e) {
-    e.preventDefault();
-    console.log('Horray! Someone wrote "' + searchTerm + '"!');
+    dom.formSubmit(form);
+    unsplashService.searchImages(searchTerm);
+    // .then((response) => {
+    // console.log('response', response);
+    // });
+  // }
 
-    unsplashService.searchImages(searchTerm)
-      .then((response) => {
-        console.log('response', response);
-      });
-  }
-
-    //
-    // page = 6;
-    // xhr(page);
-    // moreButton.classList.remove('displayNone');
+  //
+  // page = 6;
+  // xhr(page);
+  // moreButton.classList.remove('displayNone');
 
 
 
