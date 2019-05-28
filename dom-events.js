@@ -1,12 +1,5 @@
 function domEvents() {
 
-  // const unsplashService = unsplashServiceAPI();
-  // const http = xhrRequestService();
-
-
-
-
-
   function formElement() {
     const form = document.getElementById('form');
     return form;
@@ -17,9 +10,8 @@ function domEvents() {
     return searchTerm;
   }
 
-  function resultsContainer() {
-    const results = document.getElementById('results');
-    return results;
+  function displaySearchTerm(searchTerm) {
+    return document.getElementById('resultsText').innerHTML = `You searched for ${searchTerm}`;
   }
 
   function moreButton() {
@@ -40,44 +32,33 @@ function domEvents() {
             <h3>likes: ${elem.likes}</h3>
             <img src="${elem.urls.small}" />
           </div>`;
-      results.innerHTML = result;
+      const results = document.getElementById('results').innerHTML = result;
     });
+    document.getElementById('more').classList.remove('displayNone');
 
     return results;
   }
 
-  // const results = document.getElementById('results');
-  // let result = '';
+  function networkError(error) {
+    const errorPlaceholder = document.getElementById('XMLHttpError');
+    errorPlaceholder.innerHTML = 'Network connection error! Check you internet connection!';
+    return errorPlaceholder;
+  }
 
-  // function formSubmit(){
-  //   return addEventListener('submit', function(e){
-  //
-  //     e.preventDefault();
-  //     const searchTerm = document.getElementById('search').value;
-  //     // console.log('Horray! Someone wrote "' + searchTerm + '"!');
-  //     return unsplashService.searchImages(searchTerm);
-  //
-  //   });
-  // }
-
-  // function searchImages(searchTerm) {
-  //   return http
-  //
-  //     .get(
-  //       `${searchURL}page=1&per_page=${page}&orientation=squarish&query=${searchTerm}`,
-  //     );
-  // }
-
-
-
+  function removeError() {
+    const errorPlaceholder = document.getElementById('XMLHttpError');
+    errorPlaceholder.classList.add('displayNone');
+    return errorPlaceholder;
+  }
 
 
   return {
     formElement,
     returnSearchTerm,
-    resultsContainer,
+    displaySearchTerm,
     moreButton,
-    displayImages
+    displayImages,
+    networkError,
+    removeError
   };
-
 }

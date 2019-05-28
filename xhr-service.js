@@ -6,10 +6,8 @@ function xhrRequestService() {
 
     return new Promise((resolve, reject) => {
 
-
       const xhr = new XMLHttpRequest();
 
-      // THIS ALLOWS REQUEST TO BE HANDLED ASYNCRONOUSLY
       xhr.open(method, apiURL, true);
 
       xhr.setRequestHeader('Authorization', `Client-ID ${apikey}`);
@@ -19,44 +17,31 @@ function xhrRequestService() {
         if (xhr.readyState === 4) {
 
           if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            console.log('JSON RESPONSE', response);
             resolve(xhr);
-
 
           } else {
             console.error('ERROR', xhr.statusText);
-            // resultsText.innerHTML = xhr.statusText;
+            reject(xhr);
           }
 
-
-          // IF THERE IS NO CALL TO THE API VIA CONTENTTYPE HEADER, RETURN SEARCH AGAIN ERROR MESSAGE
-          const contentType = xhr.getResponseHeader('link');
-          if (contentType === null) {
-            // resultsText.innerHTML = `No results for "${input.value}"! Search again!`;
-          } else {
-            // resultsText.innerHTML = `You search for "${input.value}"`;
+          const contentType = xhr.getResponseHeader('x-total');
+          if (contentType === '0') {
+            document.getElementById('XMLHttpError').innerHTML = 'No results. Search again!';
           }
         }
-        return response = JSON.parse(xhr.responseText);
       };
-
       // NETWORK CONNECTION ERROR
       xhr.onerror = function() {
-        // resultsText.innerHTML = 'Network connection error! Check you internet connection!';
-        console.log('Network connection error! Check you internet connection!');
+        reject(xhr);
       };
 
       xhr.send(null);
-    })
-
+    });
   }
-
 
   function get(apiURL) {
     return http('GET', apiURL);
   }
-
 
   return {
     get
