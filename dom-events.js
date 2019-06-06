@@ -1,11 +1,12 @@
 function domEvents() {
 
-  function formElement() {
-    const form = document.getElementById('form');
+  function formElement() { // function nameing
+      const form = document.getElementById('form');
+      // please refactor
     return form;
-  }
+    }
 
-  function returnSearchTerm() {
+  function returnSearchTerm() { // getSearchTerm is more comoon
     const searchTerm = document.getElementById('search').value;
     return searchTerm;
   }
@@ -14,17 +15,21 @@ function domEvents() {
     return document.getElementById('resultsText').innerHTML = `You searched for ${searchTerm}`;
   }
 
-  function moreButton() {
-    const moreButton = document.getElementById('more');
+  function moreButton() { // function naming
+      const moreButton = document.getElementById('more');
+      // please refactor
     return moreButton;
   }
 
+
+    // function displayImages(images)
+    // handle only images, not response object
   function displayImages(response) {
     const res = JSON.parse(response.response);
 
     let result = '';
     res.results.forEach(elem => {
-      console.log('foreach', elem);
+      console.log('foreach', elem); // please remove at the end
 
       result +=
           `<div class="res">
@@ -39,8 +44,9 @@ function domEvents() {
     return results;
   }
 
-  function networkError(error) {
-    const errorPlaceholder = document.getElementById('XMLHttpError');
+  function networkError(error) { // function naming
+      const errorPlaceholder = document.getElementById('XMLHttpError');
+    //   please put the top of the module
     errorPlaceholder.innerHTML = 'Network connection error! Check you internet connection!';
     return errorPlaceholder;
   }

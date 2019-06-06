@@ -1,4 +1,4 @@
-function xhrRequestService() {
+function XhrService() {
 
   const apikey = 'ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489';
 
@@ -24,6 +24,8 @@ function xhrRequestService() {
             reject(xhr);
           }
 
+          // please move it to the correspondig then or catch function
+          // please use response.results.length instead of some headers to check the results
           const contentType = xhr.getResponseHeader('x-total');
           if (contentType === '0') {
             document.getElementById('XMLHttpError').innerHTML = 'No results. Search again!';
@@ -47,3 +49,9 @@ function xhrRequestService() {
     get
   };
 }
+
+
+/*
+    Think about how and where you want to handle errors,
+
+*/

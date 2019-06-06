@@ -1,6 +1,6 @@
-function unsplashServiceAPI() {
+function UnsplashAPIService() {
 
-  const http = xhrRequestService();
+  const http = XhrRequestService();
 
   const searchURL = 'https://api.unsplash.com/search/photos?';
   let page = 0;
@@ -8,7 +8,8 @@ function unsplashServiceAPI() {
 
   function searchImages(searchTerm) {
     page = 6;
-    perPage = 6;
+      perPage = 6;
+      // please fix pagination
 
     return http
       .get(
@@ -16,7 +17,7 @@ function unsplashServiceAPI() {
       );
   }
 
-  function moreImages(searchTerm) {
+  function getNextPageOfImages(searchTerm) {
     page++;
     perPage += 6;
 
@@ -31,3 +32,8 @@ function unsplashServiceAPI() {
     moreImages
   };
 }
+
+/*
+    Please put in this file every unsplash related thing: apiKay, headers
+*/
+

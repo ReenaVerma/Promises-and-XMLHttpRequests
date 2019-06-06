@@ -34,3 +34,20 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   };
 });
+
+/*
+    please remove empty lines, and be consistent
+    please use full name everywhere for easier understanding
+    please remove the console.logs in the final implementation
+*/
+
+/*
+    NAMING CONVENTIONS
+    factory functions, classes               --> uppercase  (UnsplashService)
+    instances of factory function or classes --> lowercase  (unsplashService)
+    functions                                --> lower case always use verbs, or commands
+    variables                                --> subject
+    boolean variable                         --> can be a yes/no question (isVisible)
+*/
+
+// OOP SOLID principles
