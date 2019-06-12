@@ -1,57 +1,36 @@
 function XhrService() {
-
-  const apikey = 'ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489';
-
-  function http(method, apiURL) {
-
+  function http(method, apiURL, headers) {
     return new Promise((resolve, reject) => {
-
       const xhr = new XMLHttpRequest();
 
       xhr.open(method, apiURL, true);
 
-      xhr.setRequestHeader('Authorization', `Client-ID ${apikey}`);
-      xhr.setRequestHeader( 'Header', 'Accept-Version: v1' );
+      Object.keys(headers).forEach((headerKey) => {
+        xhr.setRequestHeader(headerKey, headers[headerKey]);
+      });
 
       xhr.onload = function () {
         if (xhr.readyState === 4) {
-
           if (xhr.status === 200) {
             resolve(xhr);
-
           } else {
-            console.error('ERROR', xhr.statusText);
             reject(xhr);
-          }
-
-          // please move it to the correspondig then or catch function
-          // please use response.results.length instead of some headers to check the results
-          const contentType = xhr.getResponseHeader('x-total');
-          if (contentType === '0') {
-            document.getElementById('XMLHttpError').innerHTML = 'No results. Search again!';
           }
         }
       };
-      // NETWORK CONNECTION ERROR
+
       xhr.onerror = function() {
         reject(xhr);
       };
-
       xhr.send(null);
     });
   }
 
-  function get(apiURL) {
-    return http('GET', apiURL);
+  function get(apiURL, headers) {
+    return http('GET', apiURL, headers);
   }
 
   return {
     get
   };
 }
-
-
-/*
-    Think about how and where you want to handle errors,
-
-*/

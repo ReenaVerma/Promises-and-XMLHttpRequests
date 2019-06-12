@@ -1,53 +1,42 @@
 document.addEventListener('DOMContentLoaded', function() {
+  const unsplashService     = UnsplashAPIService();
+  const domEvents           = DomEvents();
+  const searchForm          = DomEvents().getFormElement();
+  const moreButton          = DomEvents().getMoreButton();
+  const errorPlaceholder    = document.getElementById('erroPlaceholder');
 
-  const unsplashService = unsplashServiceAPI();
-  const dom             = domEvents();
-  const form            = domEvents().formElement();
-  const moreButton      = domEvents().moreButton();
+  searchForm.addEventListener('submit', function(event){
+    event.preventDefault();
+    const searchTerm = domEvents.getSearchTerm();
+    domEvents.displaySearchTerm(searchTerm);
 
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    const searchTerm = dom.returnSearchTerm();
-    dom.displaySearchTerm(searchTerm);
-
-    unsplashService.searchImages(searchTerm)
+    unsplashService.getImages(searchTerm)
       .then((response) => {
-        dom.displayImages(response);
+        const res = JSON.parse(response.response);
+        const imageURLs = res.results.map(images => images.urls.small);
+
+        if (imageURLs.length > 0) {
+          domEvents.displayImages(imageURLs);
+        } else {
+          errorPlaceholder.innerHTML = 'No results. Search again!';
+        }
       })
       .catch((error) => {
         if (error) {
-          dom.networkError();
+          domEvents.showNetworkError();
         }
       });
-    // dom.removeError();
   });
 
-  moreButton.onclick = function(e) {
-    e.preventDefault();
-    const searchTerm = dom.returnSearchTerm();
-    unsplashService.moreImages(searchTerm)
+  moreButton.onclick = function(event) {
+    event.preventDefault();
+    const searchTerm = domEvents.getSearchTerm();
 
+    unsplashService.getNextPageOfImages(searchTerm)
       .then((response) => {
-        dom.displayImages(response);
+        const res = JSON.parse(response.response);
+        const imageURLs = res.results.map(images => images.urls.small);
+        domEvents.displayImages(imageURLs);
       });
   };
 });
-
-/*
-    please remove empty lines, and be consistent
-    please use full name everywhere for easier understanding
-    please remove the console.logs in the final implementation
-*/
-
-/*
-    NAMING CONVENTIONS
-    factory functions, classes               --> uppercase  (UnsplashService)
-    instances of factory function or classes --> lowercase  (unsplashService)
-    functions                                --> lower case always use verbs, or commands
-    variables                                --> subject
-    boolean variable                         --> can be a yes/no question (isVisible)
-*/
-
-// OOP SOLID principles

@@ -72,7 +72,7 @@ button:hover {
   text-align: center;
 }
 
-.res {
+.resultsItem {
   width: 30%;
   height: 100%;
   text-align: center;
@@ -93,7 +93,7 @@ img {
     flex-flow: column wrap;
   }
 
-  .res {
+  .resultsItem {
     width: 100%;
     margin: 0px;
   }
