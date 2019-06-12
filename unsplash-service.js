@@ -1,9 +1,9 @@
 function UnsplashAPIService() {
-  const http = XhrService();
+  const http      = XhrService();
   const searchURL = 'https://api.unsplash.com/search/photos?';
-  const apikey = 'ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489';
-  let page = 0;
-  let perPage = 0;
+  const apikey    = 'ea89472bcd9a0938b2da37e34240e6fac38ba3115598dd62f16cdc4f0cabc489';
+  let page        = 0;
+  let perPage     = 0;
 
   const headers = {
     'Authorization': `Client-ID ${apikey}`,
@@ -35,7 +35,3 @@ function UnsplashAPIService() {
     getNextPageOfImages
   };
 }
-
-/*
-    Please put in this file every unsplash related thing: apiKay, headers
-*/
