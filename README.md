@@ -1,4 +1,4 @@
-# Image search
+# Image search...
 
 ## Notes
 * I did not look at your code at all, as I really wanted you to see, how I would attempt this task fist time round.
